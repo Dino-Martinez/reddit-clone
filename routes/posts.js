@@ -1,11 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const Post = require('../models/post')
+const Post = require('../models/post') // Import Post model for Mongoose
 
+// Route to display the create post form
 router.get('/create', (req, res) => {
   res.render('create-post')
 })
 
+// Route to create a post based on a filled out form, and redirect to index page
 router.post('/create', (req, res) => {
   // INSTANTIATE INSTANCE OF POST MODEL
   const post = new Post(req.body)
@@ -17,6 +19,7 @@ router.post('/create', (req, res) => {
   })
 })
 
+// Route to query for a single post and render the display page
 router.get('/:postId', (req, res) => {
   console.log('Searching for post...')
   Post.findById(req.params.postId)
@@ -27,6 +30,15 @@ router.get('/:postId', (req, res) => {
     .catch((err) => {
       console.log(err.message)
     })
+})
+
+router.get('/delete/:postId', (req, res) => {
+  Post.findByIdAndDelete(req.params.postId).then((err) => {
+    if (err !== null) {
+      console.log(err)
+    }
+    res.redirect('/')
+  })
 })
 
 module.exports = router
