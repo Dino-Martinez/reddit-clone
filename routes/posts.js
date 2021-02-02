@@ -2,18 +2,18 @@ const express = require('express')
 const router = express.Router()
 const Post = require('../models/post')
 
-router.get('/new', (req, res) => {
-  res.render('posts-new')
+router.get('/create', (req, res) => {
+  res.render('create-post')
 })
 
-router.post('/new', (req, res) => {
+router.post('/create', (req, res) => {
   // INSTANTIATE INSTANCE OF POST MODEL
   const post = new Post(req.body)
 
   // SAVE INSTANCE OF POST MODEL TO DB
   post.save((err, post) => {
     // REDIRECT TO THE ROOT
-    return res.render('home')
+    res.redirect('/')
   })
 })
 
@@ -22,7 +22,7 @@ router.get('/:postId', (req, res) => {
   Post.findById(req.params.postId)
     .lean()
     .then((post) => {
-      res.render('posts-show', { post })
+      res.render('view-post', { post })
     })
     .catch((err) => {
       console.log(err.message)

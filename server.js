@@ -24,7 +24,7 @@ app.get('', (req, res) => {
   Post.find({})
     .lean()
     .then((posts) => {
-      res.render('posts-index', { posts })
+      res.render('all-posts', { posts })
     })
     .catch((err) => {
       console.log(err.message)
@@ -35,3 +35,5 @@ app.get('', (req, res) => {
 app.listen(3000, () => {
   console.log('Gif Search listening on port localhost:3000!')
 })
+
+module.exports = app
