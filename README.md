@@ -1,3 +1,3 @@
 # reddit-clone | Backpage of the internet
 
-The project name is self explanatory
+Following a tutorial for making a reddit clone, using express and handlebars

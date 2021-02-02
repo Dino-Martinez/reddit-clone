@@ -7,19 +7,27 @@ const Post = require('./models/post')
 
 // App Setup
 const app = express()
-app.use(express.static('public'))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
-app.use(expressValidator())
 
 // Middleware
-const exphbs = require('express-handlebars')
+// Use css/other static files
+app.use(express.static('public'))
 
+// Use body parser for rich json experience
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
+
+// Use express validator for sanitizing string inputs
+app.use(expressValidator())
+
+// Use handlebars for templating
+const exphbs = require('express-handlebars')
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
+// Use router for modularization of code
 app.use(router)
 
+// Home route
 app.get('', (req, res) => {
   Post.find({})
     .lean()
