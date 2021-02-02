@@ -17,4 +17,16 @@ router.post('/new', (req, res) => {
   })
 })
 
+router.get('/:postId', (req, res) => {
+  console.log('Searching for post...')
+  Post.findById(req.params.postId)
+    .lean()
+    .then((post) => {
+      res.render('posts-show', { post })
+    })
+    .catch((err) => {
+      console.log(err.message)
+    })
+})
+
 module.exports = router

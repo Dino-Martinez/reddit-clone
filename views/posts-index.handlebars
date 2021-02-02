@@ -2,7 +2,7 @@
   <div class="col-sm-8 col-sm-offset-2">
     {{#each posts}}
         <li class="list-group-item">
-            <div class="lead">{{this.title}}</div>
+            <div class="lead"><a href="/posts/{{this._id}}">{{this.title}}</a></div>
             <a href="{{this.url}}" target="_blank">{{this.url}}</a>
         </li>
     {{/each}}
