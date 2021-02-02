@@ -4,28 +4,32 @@ const Post = require('../models/post') // Import Post model for Mongoose
 
 // Route to display the create post form
 router.get('/create', (req, res) => {
-  res.render('create-post')
+  return res.render('create-post')
 })
 
 // Route to create a post based on a filled out form, and redirect to index page
 router.post('/create', (req, res) => {
   // INSTANTIATE INSTANCE OF POST MODEL
-  const post = new Post(req.body)
+  const postJson = req.body
+  const subredditsString = postJson.subreddits
+  const subredditsArray = subredditsString.split(' ')
+  postJson.subreddits = subredditsArray
+  const post = new Post(postJson)
 
   // SAVE INSTANCE OF POST MODEL TO DB
   post.save((err, post) => {
     // REDIRECT TO THE ROOT
-    res.redirect('/')
+    return res.redirect('/')
   })
 })
 
 // Route to query for a single post and render the display page
 router.get('/:postId', (req, res) => {
-  console.log('Searching for post...')
   Post.findById(req.params.postId)
     .lean()
+    .populate('comments')
     .then((post) => {
-      res.render('view-post', { post })
+      return res.render('view-post', { post })
     })
     .catch((err) => {
       console.log(err.message)
@@ -35,9 +39,9 @@ router.get('/:postId', (req, res) => {
 router.get('/delete/:postId', (req, res) => {
   Post.findByIdAndDelete(req.params.postId).then((err) => {
     if (err !== null) {
-      console.log(err)
+      console.log(err.message)
     }
-    res.redirect('/')
+    return res.redirect('/')
   })
 })
 

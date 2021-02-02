@@ -4,7 +4,7 @@ const Post = require('../models/post') // Import Post model for Mongoose
 
 // SUBREDDIT
 router.get('/:subreddit', function (req, res) {
-  Post.find({ subreddit: req.params.subreddit })
+  Post.find({ subreddits: req.params.subreddit })
     .lean()
     .then((posts) => {
       res.render('all-posts', { posts })

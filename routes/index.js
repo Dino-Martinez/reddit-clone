@@ -1,11 +1,13 @@
 const express = require('express')
-const postRoutes = require('./posts.js')
-const subredditRoutes = require('./subs.js')
+const postRoutes = require('./posts')
+const subredditRoutes = require('./subs')
+const commentRoutes = require('./comments')
 
 const router = express.Router()
 
 // Use postRoutes to modularize all post-related routes
 router.use('/posts/', postRoutes)
 router.use('/n/', subredditRoutes)
+router.use('/comments/', commentRoutes)
 
 module.exports = router

@@ -1,15 +1,23 @@
 <div class="row">
-  <div class="col-sm-8 col-sm-offset-2">
+  <div class="col-sm-10 col-sm-offset-2">
     {{#each posts}}
-    <li class="list-group-item">
-      <div class="lead">
-        <a href="/posts/{{this._id}}" class="lead">{{this.title}}</a>
+    <div class="list-group-item">
+      <div class="row ">
+        <div class="col-6">
+          <div class="lead">
+            <a href="/posts/{{this._id}}" class="lead">{{this.title}}</a>
+          </div>
+          <a href="{{this.url}}" target="_blank">{{this.url}}</a>
+        </div>
+        <div class="col-6">
+          <div class="position-absolute px-3" style="right:0; bottom:0">
+            {{#each this.subreddits}}
+            <a href="/n/{{this}}">{{this}}</a>,
+            {{/each}}
+          </div>
+        </div>
       </div>
-      <a href="{{this.url}}" target="_blank">{{this.url}}</a>
-      <div class="text-right">
-        <a href="/n/{{this.subreddit}}">{{this.subreddit}}</a>
-      </div>
-    </li>
+    </div>
     {{/each}}
   </div>
 </div>
