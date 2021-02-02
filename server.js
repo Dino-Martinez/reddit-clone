@@ -3,6 +3,7 @@ const router = require('./routes/index.js')
 const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const connection = require('./data/reddit-db')
+const Post = require('./models/post')
 
 // App Setup
 const app = express()
@@ -20,7 +21,14 @@ app.set('view engine', 'handlebars')
 app.use(router)
 
 app.get('', (req, res) => {
-  return res.render('home')
+  Post.find({})
+    .lean()
+    .then((posts) => {
+      res.render('posts-index', { posts })
+    })
+    .catch((err) => {
+      console.log(err.message)
+    })
 })
 
 // Start Server
