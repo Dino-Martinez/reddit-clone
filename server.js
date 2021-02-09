@@ -4,6 +4,9 @@ const bodyParser = require('body-parser')
 const expressValidator = require('express-validator')
 const connection = require('./data/reddit-db')
 const Post = require('./models/post')
+require('dotenv').config()
+var cookieParser = require('cookie-parser')
+const jwt = require('jsonwebtoken')
 
 // App Setup
 const app = express()
@@ -11,6 +14,9 @@ const app = express()
 // Middleware
 // Use css/other static files
 app.use(express.static('public'))
+
+// Use web tokens for authentication
+app.use(cookieParser())
 
 // Use body parser for rich json experience
 app.use(bodyParser.json())

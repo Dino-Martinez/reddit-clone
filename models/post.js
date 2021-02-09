@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 // Schema for a single post
 const PostSchema = new Schema(
   {
+    createdAt: { type: Date },
     title: { type: String, required: true },
     url: { type: String, required: true },
     summary: { type: String, required: true },
