@@ -56,6 +56,7 @@ app.get('/', (req, res) => {
   const currentUser = req.user
   Post.find({})
     .lean()
+    .populate('author')
     .then((posts) => {
       res.render('all-posts', { posts, currentUser })
     })
