@@ -3,6 +3,17 @@ const router = express.Router()
 const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
+router.get('/profile/:userId', (req, res) => {
+  const user = User.findById(req.params.userId)
+    .lean()
+    .populate('comments')
+    .populate('posts')
+    .then((user) => {
+      console.log(user)
+      res.render('view-user', { user })
+    })
+})
+
 router.get('/sign-up', (req, res) => {
   const currentUser = req.user
   return res.render('sign-up', { currentUser })
@@ -71,7 +82,7 @@ router.get('/logout', (req, res) => {
 })
 
 router.get('/drop-all', (req, res) => {
-  User.deleteMany({ username: 'username' }).then(() => {
+  User.deleteMany({ username: { $ne: '' } }).then(() => {
     res.redirect('/')
   })
 })

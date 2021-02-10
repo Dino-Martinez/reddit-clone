@@ -8,7 +8,9 @@
             <a href="/posts/{{this._id}}" class="lead">{{this.title}}</a>
           </div>
           <a href="{{this.url}}" target="_blank">{{this.url}}</a>
-          <div><small>{{this.author.username}}</small></div>
+          <div>
+            <a href="/users/profile/{{this.author._id}}"><small>{{this.author.username}}</small></a>
+          </div>
         </div>
         <div class="col-6">
           <div class="position-absolute px-3" style="right:0; bottom:0">

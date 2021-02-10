@@ -4,26 +4,30 @@ const Comment = require('../models/comment') // Import Post/Comment model for Mo
 const Post = require('../models/post')
 const User = require('../models/user')
 
-router.post('/:postId', async (req, res) => {
+router.post('/:postId', (req, res) => {
   if (!req.user) {
     return res.sendStatus(401)
   }
   const comment = new Comment(req.body)
-  const post = await Post.findById(req.params.postId)
   comment.author = req.user._id
 
   comment
     .save()
     .then((comment) => {
+      return User.findById(comment.author)
+    })
+    .then((user) => {
+      user.comments.unshift(comment)
+      return user.save()
+    })
+    .then((user) => {
+      return Post.findById(req.params.postId)
+    })
+    .then((post) => {
       post.comments.unshift(comment)
       return post.save()
     })
     .then((post) => {
-      return User.findById(comment.author)
-    })
-    .then((user) => {
-      user.posts.unshift(post)
-      user.save()
       return res.redirect(`/posts/${post._id}`)
     })
     .catch((err) => {
