@@ -5,6 +5,7 @@ const CommentSchema = new Schema(
   {
     createdAt: { type: Date },
     content: { type: String, required: true },
+    author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
   },
   { timestamps: { createdAt: 'created_at' } }
 )

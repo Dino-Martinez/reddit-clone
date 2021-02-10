@@ -2,24 +2,29 @@ const express = require('express')
 const router = express.Router()
 const Comment = require('../models/comment') // Import Post/Comment model for Mongoose
 const Post = require('../models/post')
+const User = require('../models/user')
 
-router.post('/:postId', (req, res) => {
-  // INSTANTIATE INSTANCE OF MODEL
+router.post('/:postId', async (req, res) => {
+  if (!req.user) {
+    return res.sendStatus(401)
+  }
   const comment = new Comment(req.body)
+  const post = await Post.findById(req.params.postId)
+  comment.author = req.user._id
 
-  // SAVE INSTANCE OF Comment MODEL TO DB
   comment
     .save()
     .then((comment) => {
-      // REDIRECT TO THE ROOT
-      return Post.findById(req.params.postId)
-    })
-    .then((post) => {
       post.comments.unshift(comment)
       return post.save()
     })
     .then((post) => {
-      return res.redirect('/')
+      return User.findById(comment.author)
+    })
+    .then((user) => {
+      user.posts.unshift(post)
+      user.save()
+      return res.redirect(`/posts/${post._id}`)
     })
     .catch((err) => {
       console.log(err)

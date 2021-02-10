@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Post = require('../models/post') // Import Post model for Mongoose
+const User = require('../models/user')
 
 // Route to display the create post form
 router.get('/create', (req, res) => {
@@ -21,12 +22,22 @@ router.post('/create', (req, res) => {
   postJson.subreddits = subredditsArray
 
   const post = new Post(postJson)
+  post.author = req.user._id
 
   // SAVE INSTANCE OF POST MODEL TO DB
-  post.save((err, post) => {
-    // REDIRECT TO THE ROOT
-    return res.redirect('/')
-  })
+  post
+    .save()
+    .then((post) => {
+      return User.findById(req.user._id)
+    })
+    .then((user) => {
+      user.posts.unshift(post)
+      user.save()
+      res.redirect(`/posts/${post._id}`)
+    })
+    .catch((err) => {
+      console.log(err.message)
+    })
 })
 
 // Route to query for a single post and render the display page
