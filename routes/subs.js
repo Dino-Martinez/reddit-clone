@@ -4,10 +4,11 @@ const Post = require('../models/post') // Import Post model for Mongoose
 
 // SUBREDDIT
 router.get('/:subreddit', function (req, res) {
+  const currentUser = req.user
   Post.find({ subreddits: req.params.subreddit })
     .lean()
     .then((posts) => {
-      res.render('all-posts', { posts })
+      res.render('all-posts', { posts, currentUser })
     })
     .catch((err) => {
       console.log(err)

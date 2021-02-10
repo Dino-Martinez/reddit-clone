@@ -30,15 +30,34 @@ const exphbs = require('express-handlebars')
 app.engine('handlebars', exphbs({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 
+// Middleware for checking user authentication
+const checkAuth = (req, res, next) => {
+  if (
+    typeof req.cookies.nToken === 'undefined' ||
+    req.cookies.nToken === null
+  ) {
+    req.user = null
+  } else {
+    var token = req.cookies.nToken
+    var decodedToken = jwt.decode(token, { complete: true }) || {}
+    req.user = decodedToken.payload
+  }
+
+  next()
+}
+
+app.use(checkAuth)
+
 // Use router for modularization of code
 app.use(router)
 
 // Home route
-app.get('', (req, res) => {
+app.get('/', (req, res) => {
+  const currentUser = req.user
   Post.find({})
     .lean()
     .then((posts) => {
-      res.render('all-posts', { posts })
+      res.render('all-posts', { posts, currentUser })
     })
     .catch((err) => {
       console.log(err.message)

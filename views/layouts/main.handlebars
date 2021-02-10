@@ -12,13 +12,18 @@
     <nav class="navbar navbar-default">
       <div class="d-flex">
         <a href="/" class="nav-link">Reddit.js</a>
-        <a href="/posts/create" class="nav-link">New Post</a>
+        {{#if currentUser}}
+          <a href="/posts/create" class="nav-link">New Post</a>
+        {{/if}}
       </div>
       <div class="container-fluid">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="/users/logout">Logout</a></li>
-          <li><a href="/users/login">Login</a></li>
-          <li><a href="/users/sign-up">Sign Up</a></li>
+          {{#if currentUser}}
+            <li><a class="nav-link" href="/users/logout">Logout</a></li>
+          {{else}}
+            <li><a class="nav-link" href="/users/login">Login</a></li>
+            <li><a class="nav-link" href="/users/sign-up">Sign Up</a></li>
+          {{/if}}
         </ul>
       </div>
     </nav>

@@ -4,7 +4,8 @@ const User = require('../models/user')
 const jwt = require('jsonwebtoken')
 
 router.get('/sign-up', (req, res) => {
-  return res.render('sign-up')
+  const currentUser = req.user
+  return res.render('sign-up', { currentUser })
 })
 
 router.get('/login', (req, res) => {
