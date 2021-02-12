@@ -9,6 +9,7 @@ const expect = chai.expect
 const Post = require('../models/post')
 const server = require('../server')
 const User = require('../models/user')
+const POST_ID = '5d6ede6a0ba62570afcedd3a'
 
 chai.should()
 chai.use(chaiHttp)
@@ -17,6 +18,7 @@ const agent = chai.request.agent(app)
 describe('Posts', function () {
   // Post that we'll use for testing purposes
   const newPost = {
+    _id: POST_ID,
     title: 'post title',
     url: 'https://www.google.com',
     summary: 'post summary',
@@ -58,6 +60,32 @@ describe('Posts', function () {
                 expect(res).to.have.status(200)
                 // Check that the database has one more post in it
                 expect(newDocCount).to.be.equal(initialDocCount + 1)
+                done()
+              })
+              .catch(function (err) {
+                done(err)
+              })
+          })
+          .catch(function (err) {
+            done(err)
+          })
+      })
+      .catch(function (err) {
+        done(err)
+      })
+  })
+
+  it('Should delete a post', (done) => {
+    // Checks how many posts there are now
+    Post.estimatedDocumentCount()
+      .then(function (initialDocCount) {
+        agent
+          .get(`/posts/delete/${POST_ID}`)
+          .then(function (res) {
+            Post.estimatedDocumentCount()
+              .then(function (newDocCount) {
+                expect(res).to.have.status(200)
+                expect(newDocCount).to.be.equal(initialDocCount - 1)
                 done()
               })
               .catch(function (err) {
