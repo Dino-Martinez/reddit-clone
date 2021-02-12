@@ -72,6 +72,7 @@ describe('Posts', function () {
         done(err)
       })
   })
+
   after(function (done) {
     Post.findOneAndDelete(newPost)
       .then(function (res) {
