@@ -1,0 +1,15 @@
+.comment-indent:nth-child(n + 2) {
+  border-radius: 5px 0 0 0;
+  margin-left: 20px;
+}
+.comment {
+  border-left: 1px dotted #aaa;
+  border-top: 1px solid #aaa;
+  padding-left: 20px;
+}
+.comment-container {
+  border-right: 1px solid #aaa;
+}
+form {
+  margin-bottom: 48px;
+}

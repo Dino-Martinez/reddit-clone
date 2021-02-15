@@ -1,0 +1,14 @@
+<div class="col-xs-12 comment comment-indent">
+    <p>{{comment.content}}</p>
+    <div class="row pl-3">
+      <a class="col-8" href="/users/profile/{{comment.author._id}}">{{comment.author.username}}</a>
+      <div class="col-4 text-right">
+        <a class=" btn btn-dark text-right" href="/comments/{{postId}}/{{comment._id}}/replies/">Reply</a>
+
+      </div>
+    </div>
+
+    {{#each comment.comments}}
+        {{> comment comment=this postId=../postId}}
+    {{/each}}
+</div>

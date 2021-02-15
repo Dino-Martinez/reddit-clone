@@ -27,6 +27,42 @@ router.post('/:postId', (req, res) => {
     })
 })
 
+router.get('/:postId/:commentId/replies', (req, res) => {
+  var currentUser = req.user
+  let post
+  Post.findById(req.params.postId)
+    .lean()
+    .then((p) => {
+      post = p
+      return Comment.findById(req.params.commentId).lean()
+    })
+    .then((comment) => {
+      res.render('create-reply', { post, comment, currentUser })
+    })
+    .catch((err) => {
+      console.log(err.message)
+    })
+})
+
+router.post('/:postId/:commentId/replies', (req, res) => {
+  const reply = new Comment(req.body)
+  reply.author = req.user._id
+
+  Post.findById(req.params.postId).then((post) => {
+    Promise.all([reply.save(), Comment.findById(req.params.commentId)])
+      .then(([reply, comment]) => {
+        comment.comments.unshift(reply._id)
+
+        return Promise.all([comment.save()])
+      })
+      .then(() => {
+        res.redirect(`/posts/${req.params.postId}`)
+      })
+      .catch(console.error)
+    return post.save()
+  })
+})
+
 router.get('', (req, res) => {
   Comment.find({})
     .lean()
