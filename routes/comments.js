@@ -10,25 +10,17 @@ router.post('/:postId', (req, res) => {
   }
   const comment = new Comment(req.body)
   comment.author = req.user._id
-
   comment
     .save()
     .then((comment) => {
-      return User.findById(comment.author)
+      return Promise.all([Post.findById(req.params.postId)])
     })
-    .then((user) => {
-      user.comments.unshift(comment)
-      return user.save()
-    })
-    .then((user) => {
-      return Post.findById(req.params.postId)
-    })
-    .then((post) => {
+    .then(([post, user]) => {
       post.comments.unshift(comment)
-      return post.save()
+      return Promise.all([post.save()])
     })
     .then((post) => {
-      return res.redirect(`/posts/${post._id}`)
+      res.redirect(`/posts/${req.params.postId}`)
     })
     .catch((err) => {
       console.log(err)

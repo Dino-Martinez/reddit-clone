@@ -45,11 +45,7 @@ router.get('/:postId', (req, res) => {
   const currentUser = req.user
   Post.findById(req.params.postId)
     .lean()
-    .populate('author')
-    .populate({
-      path: 'comments',
-      populate: { path: 'author' },
-    })
+    .populate('comments')
     .then((post) => {
       return res.render('view-post', { post, currentUser })
     })

@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
+const Populate = require('../util/autopopulate')
 
 // Schema for a single post
 const PostSchema = new Schema(
@@ -14,5 +15,8 @@ const PostSchema = new Schema(
   },
   { timestamps: { createdAt: 'created_at' } }
 )
+
+// Always populate the author field
+PostSchema.pre('findOne', Populate('author')).pre('find', Populate('author'))
 
 module.exports = mongoose.model('Post', PostSchema)
