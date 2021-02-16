@@ -12,6 +12,13 @@
             <a href="/users/profile/{{this.author._id}}"><small>{{this.author.username}}</small></a>
           </div>
         </div>
+        <form class="vote-up" data-id="{{this._id}}">
+          <button class="btn btn-primary" type="submit">Vote Up</button>
+        </form>
+        {{this.voteScore}}
+        <form class="vote-down btn btn-" data-id="{{this._id}}">
+          <button class="btn btn-primary" type="submit">Vote Down</button>
+        </form>
         <div class="col-6">
           <div class="position-absolute px-3" style="right:0; bottom:0">
             {{#each this.subreddits}}

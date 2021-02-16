@@ -23,6 +23,9 @@ router.post('/create', (req, res) => {
 
   const post = new Post(postJson)
   post.author = req.user._id
+  post.upVotes = []
+  post.downVotes = []
+  post.voteScore = 0
 
   // SAVE INSTANCE OF POST MODEL TO DB
   post
@@ -60,6 +63,26 @@ router.get('/delete/:postId', (req, res) => {
       console.log(err.message)
     }
     return res.redirect('/')
+  })
+})
+
+router.put('/:id/vote-up', function (req, res) {
+  Post.findById(req.params.id).exec(function (err, post) {
+    post.upVotes.push(req.user._id)
+    post.voteScore = post.voteScore + 1
+    post.save().then(() => {
+      return res.status(200)
+    })
+  })
+})
+
+router.put('/:id/vote-down', function (req, res) {
+  Post.findById(req.params.id).exec(function (err, post) {
+    post.downVotes.push(req.user._id)
+    post.voteScore = post.voteScore - 1
+    post.save().then(() => {
+      return res.status(200)
+    })
   })
 })
 
